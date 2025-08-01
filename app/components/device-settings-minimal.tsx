@@ -113,9 +113,9 @@ export function DeviceSettingsMinimal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+      <Card className="w-full max-w-sm sm:max-w-md bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 max-h-[90vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-center justify-between pb-3">
-          <CardTitle className="text-lg text-gray-900 dark:text-white">Settings</CardTitle>
+          <CardTitle className="text-base sm:text-lg text-gray-900 dark:text-white">Settings</CardTitle>
           <Button
             variant="ghost"
             size="sm"
@@ -125,16 +125,16 @@ export function DeviceSettingsMinimal({
             <X className="w-4 h-4" />
           </Button>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3 sm:space-y-4">
           {/* Text-to-Speech Toggle */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+            <Label className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
               <Zap className="w-4 h-4" />
               ElevenLabs Voice Response
             </Label>
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   Automatically speak AI responses using ElevenLabs
                 </p>
               </div>
@@ -148,7 +148,7 @@ export function DeviceSettingsMinimal({
 
           {/* Theme */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+            <Label className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
               <Sun className="w-4 h-4" />
               Theme
             </Label>
@@ -190,7 +190,7 @@ export function DeviceSettingsMinimal({
 
           {/* Microphone */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+            <Label className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
               <Mic className="w-4 h-4" />
               Microphone
             </Label>
@@ -219,7 +219,7 @@ export function DeviceSettingsMinimal({
 
           {/* Speakers */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+            <Label className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
               <Volume2 className="w-4 h-4" />
               Speakers
             </Label>

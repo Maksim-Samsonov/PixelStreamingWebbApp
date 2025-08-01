@@ -19,7 +19,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 export default function TherapistChat() {
   const [isRecording, setIsRecording] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
-  const [showChat, setShowChat] = useState(true)
+  const [showChat, setShowChat] = useState(false) // По умолчанию скрыт на мобильных
   const [message, setMessage] = useState("")
   const [timeRemaining, setTimeRemaining] = useState(599) // 9:59 in seconds
   const [selectedAI, setSelectedAI] = useState("gpt-4o")
@@ -177,22 +177,22 @@ export default function TherapistChat() {
           isDark ? "bg-black border-gray-800" : "bg-white border-gray-200"
         }`}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
           <div>
-            <h1 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
+            <h1 className={`text-base sm:text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"} truncate`}>
               Chat with Ann - Therapist
             </h1>
-            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            <p className={`text-xs sm:text-sm ${isDark ? "text-gray-400" : "text-gray-600"} hidden sm:block`}>
               Live streaming session with AI-powered support • Whisper + ElevenLabs
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
           <LanguageSelector selectedLanguage={selectedLanguage} onLanguageChange={handleLanguageChange} />
 
           <Select value={selectedAI} onValueChange={setSelectedAI}>
             <SelectTrigger
-              className={`w-32 ${
+              className={`w-20 sm:w-32 text-xs sm:text-sm ${
                 isDark ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-300 text-gray-900"
               }`}
             >
@@ -225,7 +225,7 @@ export default function TherapistChat() {
             variant="outline"
             size="sm"
             onClick={testAPI}
-            className={isDark ? "border-gray-600 text-gray-300 hover:bg-gray-800" : ""}
+            className={`${isDark ? "border-gray-600 text-gray-300 hover:bg-gray-800" : ""} hidden sm:flex`}
           >
             🔧 API
           </Button>
@@ -235,7 +235,7 @@ export default function TherapistChat() {
             size="sm"
             onClick={testTTS}
             disabled={isGeneratingSpeech || isSpeaking}
-            className={isDark ? "border-gray-600 text-gray-300 hover:bg-gray-800" : ""}
+            className={`${isDark ? "border-gray-600 text-gray-300 hover:bg-gray-800" : ""} hidden sm:flex`}
           >
             🔊 TTS
           </Button>
@@ -256,12 +256,22 @@ export default function TherapistChat() {
             disabled={isTranscribing}
             className={`${isDark ? "border-gray-600 text-gray-300 hover:bg-gray-800" : ""} ${
               isRecording ? "bg-red-100 border-red-300" : ""
-            }`}
+            } hidden sm:flex`}
           >
             {isRecording ? "🛑 Stop" : "🎤 Voice"}
           </Button>
 
-          <Button variant="default" size="sm" className="bg-[#5137d2] hover:bg-[#4129b8] text-white">
+          {/* Mobile Chat Toggle */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowChat(!showChat)}
+            className={`${isDark ? "border-gray-600 text-gray-300 hover:bg-gray-800" : ""} sm:hidden`}
+          >
+            💬
+          </Button>
+
+          <Button variant="default" size="sm" className="bg-[#5137d2] hover:bg-[#4129b8] text-white hidden sm:flex">
             <Share className="w-4 h-4 mr-2" />
             Share
           </Button>
@@ -269,55 +279,59 @@ export default function TherapistChat() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         {/* Video Area */}
-        <div className={`flex-1 p-4 ${showChat ? "pr-2" : "pr-4"}`}>
+        <div className={`flex-1 p-2 sm:p-4 ${showChat && window.innerWidth >= 768 ? "pr-2" : ""}`}>
           <div
             className={`relative w-full h-full rounded-lg overflow-hidden border ${
               isDark ? "bg-black border-gray-800" : "bg-gray-100 border-gray-300"
             }`}
           >
             {/* Timer */}
-            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm z-20 backdrop-blur-sm">
+            <div className="absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/70 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm z-20 backdrop-blur-sm">
               Time remaining {formatTime(timeRemaining)}
             </div>
 
             {/* Recording Status */}
             {isRecording && (
-              <div className="absolute top-4 right-4 bg-red-600/90 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2 z-20 backdrop-blur-sm">
+              <div className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-red-600/90 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm flex items-center gap-1 sm:gap-2 z-20 backdrop-blur-sm">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                Recording with Whisper...
+                <span className="hidden sm:inline">Recording with Whisper...</span>
+                <span className="sm:hidden">Recording</span>
               </div>
             )}
 
             {/* Transcription Status */}
             {isTranscribing && (
-              <div className="absolute top-4 right-4 bg-[#5137d2]/90 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2 z-20 backdrop-blur-sm">
+              <div className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-[#5137d2]/90 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm flex items-center gap-1 sm:gap-2 z-20 backdrop-blur-sm">
                 <Loader2 className="w-3 h-3 animate-spin" />
-                Transcribing...
+                <span className="hidden sm:inline">Transcribing...</span>
+                <span className="sm:hidden">...</span>
               </div>
             )}
 
             {/* TTS Status */}
             {isGeneratingSpeech && (
-              <div className="absolute top-16 right-4 bg-orange-600/90 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1 z-20 backdrop-blur-sm">
+              <div className="absolute top-12 sm:top-16 right-2 sm:right-4 bg-orange-600/90 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1 z-20 backdrop-blur-sm">
                 <Loader2 className="w-3 h-3 animate-spin" />
-                Generating speech...
+                <span className="hidden sm:inline">Generating speech...</span>
+                <span className="sm:hidden">Gen...</span>
               </div>
             )}
 
             {/* Speaking Status */}
             {isSpeaking && (
-              <div className="absolute top-16 right-4 bg-green-600/90 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1 z-20 backdrop-blur-sm">
+              <div className="absolute top-12 sm:top-16 right-2 sm:right-4 bg-green-600/90 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1 z-20 backdrop-blur-sm">
                 <Volume2 className="w-3 h-3" />
-                Speaking
+                <span className="hidden sm:inline">Speaking</span>
               </div>
             )}
 
             {/* ElevenLabs Status */}
             {ttsEnabled && !isSpeaking && !isGeneratingSpeech && (
-              <div className="absolute top-16 right-4 bg-green-600/90 text-white px-2 py-1 rounded-full text-xs z-20 backdrop-blur-sm">
-                ElevenLabs Ready
+              <div className="absolute top-12 sm:top-16 right-2 sm:right-4 bg-green-600/90 text-white px-2 py-1 rounded-full text-xs z-20 backdrop-blur-sm">
+                <span className="hidden sm:inline">ElevenLabs Ready</span>
+                <span className="sm:hidden">Ready</span>
               </div>
             )}
 
@@ -328,35 +342,35 @@ export default function TherapistChat() {
             />
 
             {/* Bottom Controls Overlay */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-4 z-20">
+            <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2 sm:gap-4 z-20">
               <VolumeControl selectedSpeaker={selectedSpeaker} />
 
               {/* TTS Control */}
               {isSpeaking && (
                 <Button
                   onClick={stopTTS}
-                  className="w-10 h-10 rounded-full backdrop-blur-sm shadow-lg bg-orange-600 hover:bg-orange-700"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full backdrop-blur-sm shadow-lg bg-orange-600 hover:bg-orange-700"
                 >
-                  <VolumeX className="w-4 h-4 text-white" />
+                  <VolumeX className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                 </Button>
               )}
 
               <Button
                 onClick={handleMicToggle}
-                className={`w-12 h-12 rounded-full backdrop-blur-sm shadow-lg ${
+                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full backdrop-blur-sm shadow-lg ${
                   isRecording ? "bg-red-600 hover:bg-red-700" : "bg-gray-600/80 hover:bg-gray-700/80"
                 }`}
               >
-                {isRecording ? <MicOff className="w-5 h-5 text-white" /> : <Mic className="w-5 h-5 text-white" />}
+                {isRecording ? <MicOff className="w-4 h-4 sm:w-5 sm:h-5 text-white" /> : <Mic className="w-4 h-4 sm:w-5 sm:h-5 text-white" />}
               </Button>
 
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-white/20 bg-black/50 backdrop-blur-sm"
+                className="text-white hover:bg-white/20 bg-black/50 backdrop-blur-sm w-8 h-8 sm:w-auto sm:h-auto"
                 onClick={() => setShowSettings(!showSettings)}
               >
-                <Settings className="w-4 h-4" />
+                <Settings className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
             </div>
           </div>
@@ -365,23 +379,27 @@ export default function TherapistChat() {
         {/* Chat Panel */}
         {showChat && (
           <div
-            className={`w-96 flex flex-col border-l ${
+            className={`${
+              window.innerWidth < 768 
+                ? "absolute inset-0 z-30" 
+                : "w-80 lg:w-96 flex-shrink-0 border-l"
+            } flex flex-col ${
               isDark ? "bg-black border-gray-800" : "bg-white border-gray-300"
             }`}
           >
-            <div className="p-4 pb-2">
+            <div className="p-2 sm:p-4 pb-2 flex-1 flex flex-col">
               <div
-                className={`rounded-lg border shadow-sm flex flex-col h-[calc(100vh-8rem)] ${
+                className={`rounded-lg border shadow-sm flex flex-col flex-1 ${
                   isDark ? "bg-black border-gray-800" : "bg-white border-gray-200"
                 }`}
               >
                 {/* Chat Header */}
                 <div
-                  className={`p-4 border-b flex items-center justify-between rounded-t-lg flex-shrink-0 ${
+                  className={`p-3 sm:p-4 border-b flex items-center justify-between rounded-t-lg flex-shrink-0 ${
                     isDark ? "border-gray-800 bg-gray-900/50" : "border-gray-200 bg-gray-50"
                   }`}
                 >
-                  <h2 className={`font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                  <h2 className={`text-sm sm:text-base font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
                     Chatting with Ann - Therapist
                   </h2>
                   <Button
@@ -401,7 +419,7 @@ export default function TherapistChat() {
 
                 {/* Chat Input - Fixed at bottom */}
                 <div
-                  className={`p-4 border-t space-y-2 rounded-b-lg flex-shrink-0 ${
+                  className={`p-3 sm:p-4 border-t space-y-2 rounded-b-lg flex-shrink-0 ${
                     isDark ? "border-gray-800 bg-gray-900/50" : "border-gray-200 bg-gray-50"
                   }`}
                 >
@@ -424,7 +442,7 @@ export default function TherapistChat() {
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Send a message..."
                       onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                      className={`flex-1 ${
+                      className={`flex-1 text-sm ${
                         isDark
                           ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400"
                           : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
@@ -488,14 +506,15 @@ export default function TherapistChat() {
         )}
 
         {/* Show Chat Button when hidden */}
-        {!showChat && (
-          <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-30">
+        {!showChat && window.innerWidth >= 768 && (
+          <div className="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 z-30">
             <Button
               onClick={() => setShowChat(true)}
               className="bg-[#5137d2] hover:bg-[#4129b8] text-white shadow-lg"
               size="sm"
             >
-              💬 Show Chat
+              <span className="hidden sm:inline">💬 Show Chat</span>
+              <span className="sm:hidden">💬</span>
             </Button>
           </div>
         )}
@@ -503,7 +522,7 @@ export default function TherapistChat() {
 
       {/* Device Settings Modal */}
       {showSettings && (
-        <DeviceSettings
+        <DeviceSettingsMinimal
           onClose={() => setShowSettings(false)}
           selectedMicrophone={selectedMicrophone}
           selectedSpeaker={selectedSpeaker}

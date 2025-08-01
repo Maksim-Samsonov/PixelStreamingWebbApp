@@ -32,16 +32,16 @@ export function LanguageSelector({ selectedLanguage, onLanguageChange }: Languag
         variant="ghost"
         size="sm"
         onClick={() => setIsOpen(!isOpen)}
-        className="text-gray-600 dark:text-gray-300 hover:text-[#5137d2] dark:hover:text-[#5137d2] hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2"
+        className="text-gray-600 dark:text-gray-300 hover:text-[#5137d2] dark:hover:text-[#5137d2] hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-1 sm:gap-2 px-2 sm:px-3"
       >
-        <Globe className="w-4 h-4" />
-        <span>{currentLanguage.flag}</span>
-        <ChevronDown className="w-3 h-3" />
+        <Globe className="w-3 h-3 sm:w-4 sm:h-4" />
+        <span className="text-sm">{currentLanguage.flag}</span>
+        <ChevronDown className="w-2 h-2 sm:w-3 sm:h-3" />
       </Button>
 
       {isOpen && (
         <div className="absolute top-full right-0 mt-1 z-50">
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1 w-48">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1 w-40 sm:w-48">
             {languages.map((lang) => (
               <button
                 key={lang.code}
@@ -49,12 +49,12 @@ export function LanguageSelector({ selectedLanguage, onLanguageChange }: Languag
                   onLanguageChange(lang.code)
                   setIsOpen(false)
                 }}
-                className={`w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-sm ${
+                className={`w-full px-2 sm:px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-xs sm:text-sm ${
                   selectedLanguage === lang.code ? "bg-[#5137d2]/10 text-[#5137d2]" : "text-gray-700 dark:text-gray-300"
                 }`}
               >
-                <span>{lang.flag}</span>
-                <span>{lang.name}</span>
+                <span className="text-sm">{lang.flag}</span>
+                <span className="truncate">{lang.name}</span>
               </button>
             ))}
           </div>
